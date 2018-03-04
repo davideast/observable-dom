@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observable DOM POC</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 0;
+    }
+
+    .od-container {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  </style>
+  <script src="/index.js" type="module"></script>
+</head>
+
+<body>
+  <template id="t">
+    <div class="username">{{ name }} - {{ age }}</div>
+    <div>
+      <div>{{ name }}</div>
+      <div>
+        <div>
+          {{ age }}
+        </div>
+      </div>
+    </div>
+  </template>
+  <div class="od-container">
+
+  </div>
+</body>
+
+</html>
