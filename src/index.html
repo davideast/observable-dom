@@ -20,23 +20,35 @@
       padding: 20px;
     }
   </style>
-  <script src="/index.js" type="module"></script>
+  <script src="/Rx.js" defer></script>
+  <!-- <script src="/index.js" type="module"></script> -->
 </head>
 
 <body>
-  <template id="t">
-    <div class="username">{{ name }} - {{ age }}</div>
-    <div>
-      <div>{{ name }}</div>
-      <div>
-        <div>
-          {{ age }}
-        </div>
-      </div>
-    </div>
-  </template>
   <div class="od-container">
-
+    <observable-object>
+      <template>
+        <div class="username">{{ name }} - {{ age }}</div>
+        <div>
+          <div>{{ name }}</div>
+          <div>
+            <input type="text" #value="nameValue">
+            <button (click)="nameClick">Click</button>
+          </div>
+          <div>
+            <div>
+              {{ age }}
+              <div>
+                {{ age }}
+                <div>
+                  {{ name }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </observable-object>
   </div>
 </body>
 
