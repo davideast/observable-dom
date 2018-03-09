@@ -21,34 +21,23 @@
     }
   </style>
   <script src="/Rx.js" defer></script>
-  <!-- <script src="/index.js" type="module"></script> -->
+  <script src="/index.js" type="module"></script>
 </head>
 
 <body>
   <div class="od-container">
-    <observable-object>
+    <my-element>
       <template>
         <div class="username">{{ name }} - {{ age }}</div>
         <div>
           <div>{{ name }}</div>
           <div>
-            <input type="text" #value="nameValue">
-            <button (click)="nameClick">Click</button>
-          </div>
-          <div>
-            <div>
-              {{ age }}
-              <div>
-                {{ age }}
-                <div>
-                  {{ name }}
-                </div>
-              </div>
-            </div>
+            <input type="text" (keyup)="nameValue$" #value="nameValue">
+            <button (click)="nameClick$">Click</button>
           </div>
         </div>
       </template>
-    </observable-object>
+    </my-element>
   </div>
 </body>
 
