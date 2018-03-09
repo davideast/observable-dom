@@ -26,18 +26,19 @@
 
 <body>
   <div class="od-container">
-    <my-element>
+    <profile-element>
       <template>
         <div class="username">{{ name }} - {{ age }}</div>
         <div>
           <div>{{ name }}</div>
           <div>
-            <input type="text" (keyup)="nameValue$" #value="nameValue">
-            <button (click)="nameClick$">Click</button>
+            <input #name placeholder="name" type="text">
+            <input #age placeholder="age" type="text">
+            <button (click)="update$">Update</button>
           </div>
         </div>
       </template>
-    </my-element>
+    </profile-element>
   </div>
 </body>
 

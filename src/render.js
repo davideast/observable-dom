@@ -61,7 +61,7 @@ export function walk(hostNode, cloneNode, data) {
   return hostNode;
 }
 
-export function createHost(cloneNode, data, events) {
+export function createHost(cloneNode, data, events, elements) {
   const firstChild = cloneNode.firstChild;
   let nodeValue = '';
 
@@ -83,27 +83,37 @@ export function createHost(cloneNode, data, events) {
   }
 
   // set observable properties
-  let eventAttributes = '';
   if (typeof cloneNode.attributes !== 'undefined') {
-    eventAttributes = Object.keys(cloneNode.attributes)
-      .map(key => cloneNode.attributes[key].name)
+    const attrs = Object.keys(cloneNode.attributes)
+      .map(key => cloneNode.attributes[key].name);
+    const eventAttributes = attrs
+      .slice()
       .filter(attr => startsWith(attr, '(') && endsWith(attr, ')'));
 
+    const valueAttributes = attrs
+      .slice()
+      .filter(attr => startsWith(attr, '#'));
+      
     eventAttributes.forEach(eventAttr => {
       const event = eventAttr.replace('(', '').replace(')', '');
       const name = cloneNode.attributes.getNamedItem(eventAttr).value;
       events[name] = { event, element: cloneNode };
+    });
+
+    valueAttributes.forEach(valueAttr => {
+      const name = valueAttr.replace('#', '');
+      elements[name] = cloneNode;
     });
   }
 
   // recursively replace children
   if (children.length > 0) {
     Array.prototype.forEach.call(children, (child, i) => {
-      createHost(child, data, events);
+      createHost(child, data, events, elements);
     });
   }
 
-  return { host: cloneNode, events };
+  return { host: cloneNode, events, elements };
 }
 
 export function renderHost({ host, template, data, appendChild = true }) {

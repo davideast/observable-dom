@@ -1,6 +1,6 @@
-import { ObservableObject } from './elements/observable-object.js';
+import { ObservableElement } from './elements/observable-element.js';
 
-class MyElement extends ObservableObject {
+class Profile extends ObservableElement {
 
   getInitialValue() {
     return {
@@ -10,41 +10,27 @@ class MyElement extends ObservableObject {
   }
 
   connectedCallback() {
-    this.setSource(people$());    
+    const source$ = new Rx.BehaviorSubject(this.getInitialValue());
+    this.setSource(source$);
+
+    this.update$
+      .map(_ => {
+        const name = this.view.name.value;
+        const age = parseInt(this.view.age.value, 10);
+        return { name, age };
+      })
+      .map(newState => {
+        const state = this.source$.getValue();
+        return {
+          ...state,
+          ...newState
+        };
+      })
+      .subscribe(state => {
+        this.source$.next(state);
+      });
   }
 
 }
 
-customElements.define('my-element', MyElement);
-// customElements.define('observable-object', ObservableObject);
-
-const profile = document.querySelector('my-element');
-// const user$ = Rx.Observable.of({ name: 'Molly', age: 8 });
-// profile.setSource(user$);
-
-
-profile.nameValue$.subscribe(console.log);
-profile.nameClick$.subscribe(console.log);
-
-function people$() {
-  const d = {
-    0: { name: 'Molly', age: 8 },
-    1: { name: 'David', age: 29 },
-    2: { name: 'Shannon', age: 30 },
-    3: { name: 'Mambo', age: 3},
-    4: { name: 'Cash', age: 5 },
-    5: { name: 'Coco', age: 2 }
-  };
-  let count = 0;
-  return Rx.Observable.create(subscriber => {
-    const id = setInterval(() => {
-      if (count > 5) {
-        subscriber.complete();
-        clearInterval(id);
-        return;
-      }
-      subscriber.next(d[count]);
-      count = count + 1;
-    }, 1000);
-  });
-}
+customElements.define('profile-element', Profile);

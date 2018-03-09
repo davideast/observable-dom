@@ -1,6 +1,6 @@
 import { renderHost, createHost, walk } from '../render.js';
 
-export class ObservableObject extends HTMLElement {
+export class ObservableElement extends HTMLElement {
 
   setSource(val) {
     this.source$ = val;
@@ -24,18 +24,28 @@ export class ObservableObject extends HTMLElement {
 
     const cloneNode = this._nextTemplate.content.cloneNode(true);
 
-    const { host, events } = createHost(
+    const { host, events, elements } = createHost(
       cloneNode, 
       firstValue, 
-      firstValue
+      {},
+      {}
     );
 
     this.appendChild(host);
 
     Object.keys(events).forEach(name => {
-      this[name] = Rx.Observable.fromEvent(
+      let obs$ = Rx.Observable.fromEvent(
         events[name].element, events[name].event
       );
+      Object.defineProperty(this, name, {
+        value: obs$,
+        writable: false
+      });
+    });
+
+    Object.defineProperty(this, 'view', {
+      value: elements,
+      writable: false
     });
   }
 
