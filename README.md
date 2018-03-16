@@ -12,6 +12,7 @@ Wouldn't it be awesome if you could re-render a template based on an observable 
     <div class="profile">
       {{ name }} - {{ age }}
     </div>
+    <div [id]="name" [inner-text]="name"></div>
     <div class="profile-edit">
       <input #name placeholder="name" type="text">
       <input #age placeholder="age" type="text">

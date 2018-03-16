@@ -43,7 +43,7 @@ export class ObservableElement extends HTMLElement {
       });
     });
 
-    Object.defineProperty(this, 'view', {
+    Object.defineProperty(this, 'view_', {
       value: elements,
       writable: false
     });
@@ -51,7 +51,11 @@ export class ObservableElement extends HTMLElement {
 
   _next(data) {
     const cloneNode = this._nextTemplate.content.cloneNode(true);
-    walk(this, cloneNode, data);
+    walk(
+      this, 
+      cloneNode, 
+      data
+    );
   }
 
 }

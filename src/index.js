@@ -10,13 +10,14 @@ class Profile extends ObservableElement {
   }
 
   connectedCallback() {
+    // Maybe make the behavior subject internal?
     const source$ = new Rx.BehaviorSubject(this.getInitialValue());
     this.setSource(source$);
 
     this.update$
       .map(_ => {
-        const name = this.view.name.value;
-        const age = parseInt(this.view.age.value, 10);
+        const name = this.view_.name.value;
+        const age = parseInt(this.view_.age.value, 10);
         return { name, age };
       })
       .map(newState => {

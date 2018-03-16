@@ -51,6 +51,32 @@ export function walk(hostNode, cloneNode, data) {
     hostNode.firstChild.nodeValue = nodeValue;
   }
 
+  if (typeof cloneNode.attributes !== 'undefined') {
+    const attrs = Object
+      .keys(cloneNode.attributes)
+      .map(key => cloneNode.attributes[key].name);
+
+    const propAttributes = attrs
+      .slice()
+      .filter(attr => attr.startsWith(attr, '[') && endsWith(attr, ']'));
+
+    propAttributes.forEach(propAttr => {
+      const dataProp = cloneNode.getAttribute(propAttr);
+      const name = propAttr.replace('[', '').replace(']', '');
+      let prop = name;
+      if(name.indexOf('-') > -1) {
+        prop = name.split('-').reduce((prev, curr, i) => {
+          if(i === 0) { return curr; }
+          const cased = curr.substring(0, 1).toUpperCase() + 
+            curr.substring(1, curr.length);
+          return `${prev}${cased}`;
+        });
+      }
+      cloneNode[prop] = data[dataProp];
+      hostNode[prop] = cloneNode[prop];
+    });
+  }
+
   // recursively replace children
   if (children.length > 0) {
     Array.prototype.forEach.call(children, (child, i) => {
@@ -93,7 +119,7 @@ export function createHost(cloneNode, data, events, elements) {
     const valueAttributes = attrs
       .slice()
       .filter(attr => startsWith(attr, '#'));
-      
+    
     eventAttributes.forEach(eventAttr => {
       const event = eventAttr.replace('(', '').replace(')', '');
       const name = cloneNode.attributes.getNamedItem(eventAttr).value;

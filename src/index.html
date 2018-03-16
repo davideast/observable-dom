@@ -30,7 +30,7 @@
       <template>
         <div class="username">{{ name }} - {{ age }}</div>
         <div>
-          <div>{{ name }}</div>
+          <div [id]="name" [inner-text]="name"></div>
           <div>
             <input #name placeholder="name" type="text">
             <input #age placeholder="age" type="text">
